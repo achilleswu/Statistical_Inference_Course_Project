@@ -1,0 +1,57 @@
+---
+Title: Analysis ToothGrowth data
+output:
+  pdf_document: default
+  html_document:
+    keep_md: yes
+Author: Qiang Wu
+---
+
+# Load the ToothGrowth data and perform some basic exploratory data analyses 
+```{r, echo=TRUE, cache=TRUE}
+data("ToothGrowth")
+```
+
+# Provide a basic summary of the data.
+
+```{r,echo=TRUE,cache=TRUE}
+summary(ToothGrowth)
+```
+
+# Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
+```{r, echo=TRUE, cache=TRUE}
+library(ggplot2)
+ggplot(ToothGrowth, aes(x=len, fill=supp)) + facet_wrap(~dose) + xlab('tooth length') + ggtitle('distribution of guinea pig tooth lengths') + geom_histogram()
+```
+
+## 1. test the len with the dos
+```{r, echo=TRUE, cache=TRUE}
+t.test(ToothGrowth$len, ToothGrowth$dose, paired=FALSE, var.equal=FALSE)
+```
+The 95% percent confidence interval doesn't contain 0, that means we can reject the null hypothesis. Means tooth len is related to the dose.
+
+## 2. test the len with the supp in low does
+```{r, echo=TRUE, cache=TRUE}
+d1<-ToothGrowth[ToothGrowth$dose==0.5,]
+t.test(d1[d1$supp=="VC",]$len, d1[d1$supp=="OJ",]$len, paired=FALSE, var.equal=FALSE)
+```
+The 95% percent confidence interval doesn't contain 0, that means we can reject the null hypothesis. Means in low dose, tooth len is related to suppliment.
+
+## 3. test the len with the supp in median dose
+```{r, echo=TRUE, cache=TRUE}
+d2<-ToothGrowth[ToothGrowth$dose==1.0,]
+t.test(d2[d2$supp=="VC",]$len, d2[d2$supp=="OJ",]$len, paired=FALSE, var.equal=FALSE)
+```
+The 95% percent confidence interval doesn't contain 0, that means we can reject the null hypothesis. Means in median dose, tooth len is related to the suppliment.
+
+## 4. test the len with the supp in high dose
+```{r, echo=TRUE, cache=TRUE}
+d3<-ToothGrowth[ToothGrowth$dose==2.0,]
+t.test(d3[d3$supp=="VC",]$len, d3[d3$supp=="OJ",]$len, paired=FALSE, var.equal=FALSE)
+```
+The 95% percent confidence interval contains 0, that means we can't reject the null hypothesis. Means in high dose, we can't say tooth len relate to supp.
+
+# Conclusion
+1. ToothGrowth is related to dose.
+2. In low and medium dose, ToothGrowth len is related to supp.
+3. In high dose == 2.0, there is no obvious relationship with supp.

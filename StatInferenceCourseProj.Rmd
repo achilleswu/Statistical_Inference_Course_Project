@@ -1,0 +1,55 @@
+---
+Title: exponential distribution simulation
+output:
+  pdf_document: default
+  html_document:
+    keep_md: yes
+Author: Qiang Wu
+---
+
+ Overview: 
+ In this simulation I am trying to simulate the exponential distribution.
+ rexp(n,lambda).
+The mean of rexp is 1/lambda
+The sd of rexp is 1/lambda
+
+In this simulation, lambda = 2.
+
+Sample Mean versus Theoretical Mean: 
+
+```{r, echo=TRUE, cache=TRUE}
+suppressPackageStartupMessages(library(ggplot2))
+lambda<-2
+mns<-NULL
+for (i in 1 : 1000) mns<-c(mns, mean(rexp(40,0.2)))
+hist(mns)
+abline(v=mean(mns),col='red')
+```
+
+So our simulated mean is mean(mns) = `r mean(mns)`
+And the theoretical mean is `r 1/lambda`
+
+Sample Variance versus Theoretical Variance: Include figures (output from R) with titles. Highlight the variances you are comparing. Include text that explains your understanding of the differences of the variances.
+
+```{r, echo=TRUE, cache=TRUE}
+sds<-NULL
+for (i in 1 : 1000) sds<-c(sds, sd(rexp(40,0.2)))
+hist(sds)
+abline(v=mean(sds),col='red')
+```
+
+So our simulated variance is mean(sds) = `r mean(sds)`
+And the theoretical sd is `r 1/lambda`
+
+Distribution: To check if mns is approximate normal distribution, we plot mns of rnorm(n=1000, mean=5, sd=5) in the same graph.
+```{r, echo=TRUE, cache=TRUE}
+d1<-data.frame(x=mns,name="simulation")
+d2<-data.frame(x=rnorm(1000,mean=5,sd=5),name="theoretical")
+d<-rbind(d1,d2)
+ggplot(d,aes(x=x, fill=name))+geom_histogram()
+```
+
+From the plot, we can see the means of exp distribution is approximate normal distribution.
+
+
+
